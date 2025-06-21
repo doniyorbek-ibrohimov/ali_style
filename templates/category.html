@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+    <div class="container">
+
+        <nav class="row">
+            {% for sub_category in category.subcategories.all %}
+            <div class="col-md-3">
+
+                <div class="card card-category">
+                    <div class="img-wrap" style="background: #ffd7d7">
+                        {% if sub_category.image %}
+                            <img src="{{sub_category.image.url}}">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="/products/?sub_category={{sub_category.id}}">{{sub_category.name}}</a></h4>
+                        <ul class="list-menu">
+                            {% for product in sub_category.product_set.all|slice:":5" %}
+                                <li><a href="{% url 'products' %}">{{product.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}<!-- col./
+	</nav> <!-- row.// -->
+    </div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+{% endblock %}

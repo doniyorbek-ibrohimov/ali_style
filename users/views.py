@@ -42,4 +42,21 @@ class RegisterConfirmView(View):
             return redirect('register-confirm')
         return redirect('register')
 
+class LoginView(View):
+    def get(self,request):
+        return render(request,'login.html')
+    def post(self,request):
+        user=authenticate(
+            username=request.POST.get('username'),
+            password=request.POST.get('password'),
+        )
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        return redirect('login')
+
+
+def LogoutView(request):
+    logout(request)
+    return redirect('login')
 

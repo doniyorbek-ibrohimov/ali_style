@@ -12,7 +12,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     name=models.CharField(max_length=100)
     image=models.ImageField(upload_to='images/categories',blank=True,null=True)
-    category=models.ForeignKey(Category,on_delete=models.CASCADE)
+    category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='subcategories')
 
     def __str__(self):
         return self.name
@@ -27,6 +27,8 @@ class Product(models.Model):
     guarantee=models.CharField(blank=True,null=True,max_length=100)
     rating=models.FloatField(validators=[MinValueValidator(0.0),MaxValueValidator(5.0)],blank=True,null=True)
     sub_category=models.ForeignKey(SubCategory,on_delete=models.CASCADE)
+    country=models.CharField(max_length=100,default="China")
+    amount=models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return self.name

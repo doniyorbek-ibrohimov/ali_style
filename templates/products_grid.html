@@ -103,7 +103,7 @@
 						<span class="tag"> {{product.country}} </span>
 					</p>
 
-					<a href="#" class="btn btn-outline-primary"> <i class="fa fa-cart-plus"></i> Add to Cart </a>
+					<a href="{% url 'add-to-cart' product.id %}" class="btn btn-outline-primary"> <i class="fa fa-cart-plus"></i> Add to Cart </a>
 					
 			</figcaption>
 		</figure>

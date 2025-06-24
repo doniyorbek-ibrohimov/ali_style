@@ -94,7 +94,7 @@ class ProductView(View):
             review=Review.objects.create(
                 user=request.user,
                 product=product,
-                rate=request.POST.get('rating'),
+                rate=request.POST.get('rating') if request.POST.get('rating') else 5,
                 comment=request.POST.get('comment'),
             )
             rating_sum=product.review_set.all().aggregate(Sum('rate',))['rate__sum']

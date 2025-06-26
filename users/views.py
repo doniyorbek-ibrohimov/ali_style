@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from .models import *
+from order.models import *
 from random import randint
 from django.contrib.auth import login,logout,authenticate
 
@@ -59,4 +60,44 @@ class LoginView(View):
 def LogoutView(request):
     logout(request)
     return redirect('login')
+
+class OrdersView(View):
+    def get(self,request):
+        if request.user.is_authenticated and request.user.confirmed:
+            orders=Order.objects.filter(user=request.user)
+            context={
+                'orders':orders
+            }
+            return render(request,'profile-orders.html',context)
+
+class ProfileView(View):
+    def get(self,request):
+        if request.user.is_authenticated and request.user.confirmed:
+            return render(request,'profile-main.html')
+        return redirect('login')
+
+class AddressView(View):
+    def get(self,request):
+        if request.user.is_authenticated and request.user.confirmed:
+            return render(request,'profile-address.html')
+        return redirect('login')
+
+
+class SettingsView(View):
+    def get(self,request):
+        if request.user.is_authenticated and request.user.confirmed:
+            return render(request,'profile-settings.html')
+        return redirect('login')
+
+    def post(self,request):
+        if request.user.is_authenticated and request.user.confirmed:
+            user=request.user
+            user.first_name=request.POST.get('first_name')
+            user.last_name=request.POST.get('last_name')
+            user.phone=request.POST.get('phone')
+            user.country=request.POST.get('country')
+            user.city=request.POST.get('city')
+            user.save()
+            return redirect('settings')
+        return redirect('login')
 

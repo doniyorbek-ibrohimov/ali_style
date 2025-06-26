@@ -1,4 +1,4 @@
-
+from django.core.paginator import Paginator
 from django.db.models import Avg,Sum
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
@@ -38,7 +38,6 @@ class ProductsView(View):
             products = Product.objects.all()
             countries = products.values_list('country', flat=True).distinct()
 
-            # Grab all filters from GET
             sub_category_id = request.GET.get('sub_category')
             country = request.GET.get('country')
             min_price = request.GET.get('min_price')
@@ -64,13 +63,18 @@ class ProductsView(View):
             if max_price:
                 products = products.filter(price__lte=max_price)
 
+            page_number=request.GET.get('page')
+            paginator=Paginator(products,4)
+            page_obj=paginator.get_page(page_number)
+
             context = {
-                'products': products,
+                'products': page_obj,
                 'sub_category': sub_category,
                 'countries': countries,
                 'min_price': min_price,
                 'max_price': max_price,
                 'choice_country': country,
+                'page_obj':page_obj
             }
             return render(request, 'products_grid.html', context)
         return redirect('login')
@@ -104,4 +108,7 @@ class ProductView(View):
 
 
             return self.get(request,pk)
+
+
+
 

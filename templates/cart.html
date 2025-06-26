@@ -24,7 +24,8 @@
                         <tr>
                             <td>
                                 <figure class="itemside">
-                                    <div class="aside"><img src="{{cart_item.product.image_set.first.image.url}}" class="img-sm"></div>
+                                    <div class="aside"><img src="{{cart_item.product.image_set.first.image.url}}"
+                                                            class="img-sm"></div>
                                     <figcaption class="info">
                                         <a href="#" class="title text-dark">{{cart_item.product.name}}</a>
                                         <p class="text-muted small">Brand:
@@ -55,9 +56,18 @@
                                 </div> <!-- price-wrap .// -->
                             </td>
                             <td class="text-right">
-                                <a data-original-title="Save to Wishlist" title="" href="/tanlangan_qosh/{{savat.id}}/"
-                                   class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
-                                <a href="{% url 'remove_from_cart' cart_item.pk %}" class="btn btn-light btn-round"> Remove</a>
+                                <form action="{% url 'favorite' cart_item.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="btn btn-light"
+                                            data-toggle="tooltip"
+                                            title="Save to Wishlist"
+                                            style="border: none; background: none;">
+                                        <i class="fa fa-heart{% if cart_item.product.id in favorites %} text-danger{% endif %}"></i>
+                                    </button>
+                                </form>
+                                <a href="{% url 'remove_from_cart' cart_item.pk %}" class="btn btn-light btn-round">
+                                    Remove</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -65,7 +75,7 @@
                     </table>
 
                     <div class="card-body border-top">
-                        <a href="/buyurtma_qosh/" class="btn btn-primary float-md-right"> Make Purchase <i
+                        <a href="{% url 'payment' %}" class="btn btn-primary float-md-right"> Make Purchase <i
                                 class="fa fa-chevron-right"></i> </a>
                         <a href="#" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
                     </div>

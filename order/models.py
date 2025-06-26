@@ -10,7 +10,7 @@ class Favorite(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.name} - {self.product.name}"
+        return f"{self.user.username} - {self.product.name}"
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -21,6 +21,11 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.user.name} - {self.product.name}"
 
+class DeliveryChoices(models.TextChoices):
+    fast='Fast','Fast'
+    standard='Standard','Standard'
+
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name=models.CharField(max_length=100)
@@ -29,9 +34,10 @@ class Order(models.Model):
     country=models.CharField(max_length=100)
     city=models.CharField(max_length=100)
     address=models.CharField(max_length=255)
-    delivery_type=models.CharField(max_length=100)
-    payment_type=models.CharField(max_length=100)
+    delivery_type=models.CharField(max_length=100,choices=DeliveryChoices.choices)
+    payment_type=models.CharField(max_length=100,default="Cash")
     created_at = models.DateTimeField(auto_now_add=True)
+    total_price=models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.user.name}(ID:{self.id})"
@@ -42,5 +48,5 @@ class OrderItem(models.Model):
     amount=models.IntegerField(default=1)
 
     def __str__(self):
-        return f"{self.order.userзн.username} - {self.product.name}"
+        return f"{self.order.user.username} - {self.product.name}"
 

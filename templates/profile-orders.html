@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ========================= SECTION PAGETOP ========================= -->
+<section class="section-pagetop bg-gray">
+    <div class="container">
+        <h2 class="title-page">My account</h2>
+    </div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION PAGETOP END// ========================= -->
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+    <div class="container">
+
+        <div class="row">
+            <aside class="col-md-3">
+                <nav class="list-group">
+                    <a class="list-group-item" href="{% url 'profile' %}"> Account overview </a>
+                    <a class="list-group-item" href="{% url 'address' %}"> My Address </a>
+                    <a class="list-group-item active" href="page-profile-orders.html"> My Orders </a>
+                    <a class="list-group-item" href="{% url 'wishlist' %}"> My wishlist </a>
+                    <a class="list-group-item" href="page-profile-seller.html"> My Selling Items </a>
+                    <a class="list-group-item" href="{% url 'settings' %}"> Settings </a>
+                    <a class="list-group-item" href="{% url 'logout' %}"> Log out </a>
+                </nav>
+            </aside> <!-- col.// -->
+            <main class="col-md-9">
+                {% for order in orders %}
+                    <article class="card mb-4">
+                    <header class="card-header">
+                        <a href="#" class="float-right"> <i class="fa fa-print"></i> Print</a>
+                        <strong class="d-inline-block mr-3">Order ID: {{order.id}}</strong>
+                        <span>Order Date: {{order.created_at|date:"d M Y"}} </span>
+                    </header>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6 class="text-muted">Delivery to</h6>
+                                <p>
+                                    Full Name: {{order.first_name}} {{order.last_name}}<br>
+                                    Phone Number: +{{order.phone}} <br>
+                                    Address: {{order.country}}, {{order.city}}, {{order.address}} <br>
+                                    Delivery: {{order.delivery_type}}
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Payment</h6>
+                                <span class="text-success">
+                                    <i class="fab fa-lg fa-cc-visa">
+                                        Visa  **** 4216
+                                    </i>
+					            </span>
+                                <p>
+                                    Total Price: ${{order.total_price}} <br>
+                                    Shipping fee: $ {% if order.delivery_type == 'Fast' %} 20 {% else %} 0 {% endif %}<br>
+                                </p>
+                            </div>
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body .// -->
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for order_item in order.orderitem_set.all %}
+                                <tr>
+                                <td width="65">
+                                    <img src="{{order_item.product.image_set.first.image.url}}" class="img-xs border">
+                                </td>
+                                <td>
+                                    <p class="title mb-0">{{order_item.product.name}}</p>
+                                    <var class="price text-muted">USD {{order_item.product.price}}</var>
+                                </td>
+                                <td> Brand: <br>{{order_item.product.brand}}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive .end// -->
+                </article> <!-- card order-item .// -->
+                {% endfor %}
+            </main> <!-- col.// -->
+        </div>
+
+    </div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+{% endblock %}
